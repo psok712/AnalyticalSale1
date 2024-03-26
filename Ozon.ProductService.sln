@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.Api", "Ozon.ProductService.Api\Ozon.ProductService.Api.csproj", "{E4DC91A7-FA10-4833-B451-6B50EB3CA471}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.Domain", "Ozon.ProductService.Domain\Ozon.ProductService.Domain.csproj", "{57E036DE-60B9-4CA0-A8FC-BD6179FB07FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.DataAccess", "Ozon.ProductService.DataAccess\Ozon.ProductService.DataAccess.csproj", "{AC36D0AD-B382-401A-B1C6-47B97EC38671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.Service", "Ozon.ProductService.Service\Ozon.ProductService.Service.csproj", "{D5D9F647-3A16-4FC8-97C2-A2E59B706FA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4DC91A7-FA10-4833-B451-6B50EB3CA471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4DC91A7-FA10-4833-B451-6B50EB3CA471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4DC91A7-FA10-4833-B451-6B50EB3CA471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4DC91A7-FA10-4833-B451-6B50EB3CA471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57E036DE-60B9-4CA0-A8FC-BD6179FB07FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57E036DE-60B9-4CA0-A8FC-BD6179FB07FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57E036DE-60B9-4CA0-A8FC-BD6179FB07FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57E036DE-60B9-4CA0-A8FC-BD6179FB07FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC36D0AD-B382-401A-B1C6-47B97EC38671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC36D0AD-B382-401A-B1C6-47B97EC38671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC36D0AD-B382-401A-B1C6-47B97EC38671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC36D0AD-B382-401A-B1C6-47B97EC38671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5D9F647-3A16-4FC8-97C2-A2E59B706FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5D9F647-3A16-4FC8-97C2-A2E59B706FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5D9F647-3A16-4FC8-97C2-A2E59B706FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5D9F647-3A16-4FC8-97C2-A2E59B706FA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

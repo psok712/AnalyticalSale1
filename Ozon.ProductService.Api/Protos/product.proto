@@ -1,0 +1,96 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Ozon.ProductService.Api";
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package goods;
+
+service ProductStorage {
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/product/create"
+      body: "*"
+    };
+  }
+  rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/product"
+    };
+  }
+  rpc UpdatePriceProduct(UpdatePriceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/api/v1/update"
+      body: "*"
+    };
+  }
+  rpc GetListProduct(GoodsListRequest) returns (GoodsListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/store/product"
+      body: "*"
+    };
+  }
+}
+
+message Goods {
+  int64 id = 1;
+  string name = 2;
+  double price = 3;
+  double weight = 4;
+
+  enum CategoryGoods {
+    NONE = 0;
+    GENERAL = 1;
+    HOUSEHOLD_CHEMICALS = 2;
+    TECHNIQUE = 3;
+    PRODUCTS = 4;
+  }
+
+  CategoryGoods category = 5;
+  google.protobuf.Timestamp create_date = 6;
+  int64 warehouse_id = 7;
+}
+
+message GoodsListRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+
+  message Filter {
+    optional google.protobuf.Timestamp date = 3;
+    optional Goods.CategoryGoods category = 4;
+    optional int64 warehouse = 5;
+  }
+
+  Filter filter = 3;
+}
+
+message GoodsListResponse {
+  repeated Goods product = 1;
+}
+
+message UpdatePriceRequest {
+  int64 id = 1;
+  double price = 2;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  double price = 2;
+  double weight = 3;
+  Goods.CategoryGoods category = 4;
+  int64 warehouse_id = 5;
+}
+
+message CreateProductResponse {
+  int64 id = 1;
+}
+
+message GetProductByIdResponse {
+  Goods product = 1;
+}
+
+message GetProductByIdRequest {
+  int64 id = 1;
+}
