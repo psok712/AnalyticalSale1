@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.UniteTest", "Ozon.ProductService.UniteTest\Ozon.ProductService.UniteTest.csproj", "{6F138009-59F2-49BF-B514-EAD3C0E771AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozon.ProductService.IntegrationTest", "Ozon.ProductService.IntegrationTest\Ozon.ProductService.IntegrationTest.csproj", "{DA05B5C3-84F6-40C2-823A-B56007D74370}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{6F138009-59F2-49BF-B514-EAD3C0E771AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F138009-59F2-49BF-B514-EAD3C0E771AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F138009-59F2-49BF-B514-EAD3C0E771AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA05B5C3-84F6-40C2-823A-B56007D74370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA05B5C3-84F6-40C2-823A-B56007D74370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA05B5C3-84F6-40C2-823A-B56007D74370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA05B5C3-84F6-40C2-823A-B56007D74370}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -21,7 +21,7 @@ public class CreateProductValidator : AbstractValidator<CreateProductRequest>
             .GreaterThan(0d)
             .LessThan(double.MaxValue).WithMessage("The value entered in '{PropertyName}' is too large.");
 
-        RuleFor(el => el.Category)
+        RuleFor(el => el.CategoryProduct)
             .NotNull()
             .Must(el => el != Goods.Types.CategoryGoods.None)
             .WithMessage("'{PropertyName}' cannot have the value 'None'.")

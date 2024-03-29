@@ -52,7 +52,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
 
         bool WarehouseFilter(Product p)
         {
-            return getListProductDto.WarehouseId <= 0 || getListProductDto.WarehouseId == p.WarehouseId;
+            return getListProductDto.WarehouseId == 0 || getListProductDto.WarehouseId == p.WarehouseId;
         }
 
         bool CategoryFilter(Product p)

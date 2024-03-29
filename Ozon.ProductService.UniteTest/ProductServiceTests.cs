@@ -20,34 +20,15 @@ public class ProductServiceTests
     {
         _productService = new Service.ProductService(_productRepositoryFake.Object);
         AutoFaker.Configure(f => f.WithConventions());
-        _listProduct = new List<Product>
-        {
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate(),
-            new AutoFaker<Product>().Generate()
-        };
+        _listProduct = new AutoFaker<Product>()
+            .RuleFor(f => f.Id, id => id.Random.Number(1, int.MaxValue))
+            .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
+            .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
+            .RuleFor(f => f.Weight, weight => weight.Random.Double(1, double.MaxValue))
+            .RuleFor(f => f.Name, name => name.Name.JobArea())
+            .RuleFor(f => f.CategoryProduct, faker 
+                => (CategoryProduct)faker.Random.Number(1, Enum.GetValues(typeof(CategoryProduct)).Length - 1))
+            .Generate(30);
     }
 
     [Fact]
@@ -67,9 +48,10 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetMaxPageNumber_ShouldReturnEmptyPageProducts()
+    public void GetListProducts_SetMaxPageNumber_ShouldReturnLastDefaultPageProducts()
     {
-        var maxPageListProductFilter = new GetListProductDto(Page: int.MaxValue, 0, null, 0, 0);
+        const int maxPageNumber = int.MaxValue;
+        var maxPageListProductFilter = new GetListProductDto(Page: maxPageNumber, 0, null, 0, 0);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
@@ -82,9 +64,10 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetMinPageNumber_ShouldReturnFirstPageProducts()
+    public void GetListProducts_SetMinPageNumber_ShouldReturnFirstDefaultPageProducts()
     {
-        var minPageListProductFilter = new GetListProductDto(int.MinValue, 0, null, 0, 0);
+        const int minPageNumber = int.MinValue;
+        var minPageListProductFilter = new GetListProductDto(Page: minPageNumber, 0, null, 0, 0);
         var expectedListProduct = _listProduct.Take(DefaultPageSize);
         _productRepositoryFake
             .Setup(f => f.List())
@@ -101,7 +84,7 @@ public class ProductServiceTests
     public void GetListProducts_SetPageNumberTwo_ShouldReturnSecondPageProducts()
     {
         const int pageNumber = 2;
-        var pageNumberTwoListProductFilter = new GetListProductDto(pageNumber, 0, null, 0, 0);
+        var pageNumberTwoListProductFilter = new GetListProductDto(Page: pageNumber, 0, null, 0, 0);
         var expectedListProduct = _listProduct
             .Skip((pageNumber - 1) * DefaultPageSize)
             .Take(DefaultPageSize);
@@ -117,9 +100,10 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetMaxPageSize_ShouldReturnAllProducts()
+    public void GetListProducts_SetMaxPageSize_ShouldReturnMaxAmountProducts()
     {
-        var maxPageSizeListProductFilter = new GetListProductDto(0, PageSize: int.MaxValue, null, 0, 0);
+        const int maxPageSize = int.MaxValue;
+        var maxPageSizeListProductFilter = new GetListProductDto(0, PageSize: maxPageSize, null, 0, 0);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
@@ -134,7 +118,8 @@ public class ProductServiceTests
     [Fact]
     public void GetListProducts_SetMinPageSize_ShouldReturnEmptyListProduct()
     {
-        var minPageSizeListProductFilter = new GetListProductDto(0, PageSize: int.MinValue, null, 0, 0);
+        const int minPageSize = int.MinValue;
+        var minPageSizeListProductFilter = new GetListProductDto(0, PageSize: minPageSize, null, 0, 0);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
@@ -164,7 +149,7 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetDateTimeFilters_ShouldReturnCreateToday()
+    public void GetListProducts_SetDateTimeFilters_ShouldReturnCreatedProductsInSpecifiedDate()
     {
         var firstProductDate = _listProduct.First().CreateDate.DateTime;
         var dateTimeListProductFilter = new GetListProductDto(0, 0, DateTime: firstProductDate, 0, 0);
@@ -183,9 +168,9 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetCategoryProductGeneral_ShouldReturnFirstPageProductGeneral()
+    public void GetListProducts_SetCategoryProductAtGeneral_ShouldReturnFirstPageProductsCategoryAtGeneral()
     {
-        var categoryProduct = CategoryProduct.General;
+        const CategoryProduct categoryProduct = CategoryProduct.General;
         var generalCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
         _productRepositoryFake
             .Setup(f => f.List())
@@ -202,9 +187,9 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetCategoryProductHouseholdChemicals_ShouldReturnFirstPageProductHouseholdChemicals()
+    public void GetListProducts_SetCategoryProductAtHouseholdChemicals_ShouldReturnFirstPageProductsCategoryAtHouseholdChemicals()
     {
-        var categoryProduct = CategoryProduct.HouseholdChemicals;
+        const CategoryProduct categoryProduct = CategoryProduct.HouseholdChemicals;
         var householdChemicalsCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
         _productRepositoryFake
             .Setup(f => f.List())
@@ -221,7 +206,7 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetCategoryProductTechnique_ShouldReturnFirstPageProductTechnique()
+    public void GetListProducts_SetCategoryProductAtTechnique_ShouldReturnFirstPageProductsCategoryAtTechnique()
     {
         const CategoryProduct categoryProduct = CategoryProduct.Technique;
         var techniqueCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
@@ -240,7 +225,7 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetCategoryProductGoods_ShouldReturnFirstPageProductGoods()
+    public void GetListProducts_SetCategoryProductAtGoods_ShouldReturnFirstPageProductsCategoryAtGoods()
     {
         const CategoryProduct categoryProduct = CategoryProduct.Goods;
         var goodsCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
@@ -259,7 +244,7 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetCategoryProductNone_ShouldReturnFirstPageProductAnyCategory()
+    public void GetListProducts_SetCategoryProductAtNone_ShouldReturnFirstPageProductsAnyCategory()
     {
         const CategoryProduct categoryProduct = CategoryProduct.None;
         var anyCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
@@ -277,9 +262,10 @@ public class ProductServiceTests
     
     
     [Fact]
-    public void GetListProducts_SetMinWarehouseId_ShouldReturnFirstPageProductAnyWarehouseId()
+    public void GetListProducts_SetWarehouseIdAtDefault_ShouldReturnFirstPageProductAnyWarehouseId()
     {
-        var minWarehouseIdListProductFilter = new GetListProductDto(0, 0, null, 0, WarehouseId: int.MinValue);
+        const int anyWarehouseId = 0;
+        var minWarehouseIdListProductFilter = new GetListProductDto(0, 0, null, 0, WarehouseId: anyWarehouseId);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
@@ -293,9 +279,10 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetMaxWarehouseId_ShouldReturnFirstPageProductMaxWarehouseId()
+    public void GetListProducts_SetMaxWarehouseId_ShouldReturnFirstPageProductWithMaxWarehouseId()
     {
-        var maxWarehouseIdListProductFilter = new GetListProductDto(0, 0, null, 0, WarehouseId: int.MaxValue);
+        const int maxWarehouseId = int.MaxValue;
+        var maxWarehouseIdListProductFilter = new GetListProductDto(0, 0, null, 0, WarehouseId: maxWarehouseId);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
@@ -311,15 +298,15 @@ public class ProductServiceTests
     }
     
     [Fact]
-    public void GetListProducts_SetAnyPositiveWarehouseId_ShouldReturnFirstPageProductToWarehouseId()
+    public void GetListProducts_SetAnyWarehouseId_ShouldReturnFirstPageProductToWarehouseId()
     {
-        var firstPositiveWarehouseId = _listProduct.First(p => p.WarehouseId > 0).WarehouseId;
-        var anyPositiveWarehouseIdListProductFilter = new GetListProductDto(0, 0, null, 0, WarehouseId: firstPositiveWarehouseId);
+        var anyWarehouseId = _listProduct.First().WarehouseId;
+        var anyPositiveWarehouseIdListProductFilter = new GetListProductDto(0, 0, null, 0, WarehouseId: anyWarehouseId);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
         var expectedListProduct = _listProduct
-            .Where(p => p.WarehouseId == firstPositiveWarehouseId)
+            .Where(p => p.WarehouseId == anyWarehouseId)
             .Take(DefaultPageSize);
         
         

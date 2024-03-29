@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\product.proto" GrpcServices="Server"/>
+        <Protobuf Include="Protos\product.proto" GrpcServices="Both"/>
     </ItemGroup>
 
     <ItemGroup>
