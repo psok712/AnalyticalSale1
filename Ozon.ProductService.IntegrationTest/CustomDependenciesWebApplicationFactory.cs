@@ -14,7 +14,7 @@ namespace Ozon.ProductService.IntegrationTest;
 public class CustomDependenciesWebApplicationFactory<TEntryPoint>
     : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
-    private readonly Mock<IProductRepository> _productRepositoryFake = new();
+    private readonly Mock<IProductRepository> _productRepositoryFake = new(MockBehavior.Strict);
     public readonly List<Product> CorrectListProduct;
 
     public CustomDependenciesWebApplicationFactory()
@@ -30,20 +30,20 @@ public class CustomDependenciesWebApplicationFactory<TEntryPoint>
                 => (CategoryProduct)faker.Random.Number(1, Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate(20);
         const int expectedCreateProductId = 1;
+        const int incorrectProductId = -1;
         var firstProductId = CorrectListProduct.First().Id;
-        var incorrectProductId = -1;
 
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(CorrectListProduct);
-        
+
         _productRepositoryFake
             .Setup(f => f.Add(It.IsAny<Product>()))
             .Returns(expectedCreateProductId);
-        
+
         _productRepositoryFake
             .Setup(f => f.UpdatePrice(It.IsAny<long>(), It.IsAny<double>()));
-        
+
         _productRepositoryFake
             .Setup(f => f.Get(firstProductId))
             .Returns(CorrectListProduct.Where(p => p.Id == firstProductId).First);

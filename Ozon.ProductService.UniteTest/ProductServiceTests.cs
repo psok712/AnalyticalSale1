@@ -8,6 +8,7 @@ using Ozon.ProductService.Domain.Models;
 
 namespace Ozon.ProductService.UniteTest;
 
+
 public class ProductServiceTests
 {
     private readonly Mock<IProductRepository> _productRepositoryFake = new(MockBehavior.Strict);
@@ -29,6 +30,14 @@ public class ProductServiceTests
             .RuleFor(f => f.CategoryProduct, faker 
                 => (CategoryProduct)faker.Random.Number(1, Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate(30);
+    }
+    
+    public static IEnumerable<Object[]> CategoryFilter()
+    {
+        yield return [CategoryProduct.General];
+        yield return [CategoryProduct.HouseholdChemicals];
+        yield return [CategoryProduct.Technique];
+        yield return [CategoryProduct.Goods];
     }
 
     [Fact]
@@ -167,77 +176,20 @@ public class ProductServiceTests
         _productRepositoryFake.Verify(f => f.List(), Times.Once);
     }
     
-    [Fact]
-    public void GetListProducts_SetCategoryProductAtGeneral_ShouldReturnFirstPageProductsCategoryAtGeneral()
+    [Theory]
+    [MemberData(nameof(CategoryFilter))]
+    public void GetListProducts_SetCategoryProduct_ShouldReturnFirstPageProductsCategory(CategoryProduct category)
     {
-        const CategoryProduct categoryProduct = CategoryProduct.General;
-        var generalCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
+        var generalCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: category, 0);
         _productRepositoryFake
             .Setup(f => f.List())
             .Returns(_listProduct);
         var expectedListProduct = _listProduct
-            .Where(p => p.CategoryProduct == categoryProduct)
+            .Where(p => p.CategoryProduct == category)
             .Take(DefaultPageSize);
         
 
         var actualListProducts = _productService.GetListProducts(generalCategoryListProductFilter);
-
-        actualListProducts.Should().NotBeNull().And.BeEquivalentTo(expectedListProduct);
-        _productRepositoryFake.Verify(f => f.List(), Times.Once);
-    }
-    
-    [Fact]
-    public void GetListProducts_SetCategoryProductAtHouseholdChemicals_ShouldReturnFirstPageProductsCategoryAtHouseholdChemicals()
-    {
-        const CategoryProduct categoryProduct = CategoryProduct.HouseholdChemicals;
-        var householdChemicalsCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
-        _productRepositoryFake
-            .Setup(f => f.List())
-            .Returns(_listProduct);
-        var expectedListProduct = _listProduct
-            .Where(p => p.CategoryProduct == categoryProduct)
-            .Take(DefaultPageSize);
-        
-
-        var actualListProducts = _productService.GetListProducts(householdChemicalsCategoryListProductFilter);
-
-        actualListProducts.Should().NotBeNull().And.BeEquivalentTo(expectedListProduct);
-        _productRepositoryFake.Verify(f => f.List(), Times.Once);
-    }
-    
-    [Fact]
-    public void GetListProducts_SetCategoryProductAtTechnique_ShouldReturnFirstPageProductsCategoryAtTechnique()
-    {
-        const CategoryProduct categoryProduct = CategoryProduct.Technique;
-        var techniqueCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
-        _productRepositoryFake
-            .Setup(f => f.List())
-            .Returns(_listProduct);
-        var expectedListProduct = _listProduct
-            .Where(p => p.CategoryProduct == categoryProduct)
-            .Take(DefaultPageSize);
-        
-
-        var actualListProducts = _productService.GetListProducts(techniqueCategoryListProductFilter);
-
-        actualListProducts.Should().NotBeNull().And.BeEquivalentTo(expectedListProduct);
-        _productRepositoryFake.Verify(f => f.List(), Times.Once);
-    }
-    
-    [Fact]
-    public void GetListProducts_SetCategoryProductAtGoods_ShouldReturnFirstPageProductsCategoryAtGoods()
-    {
-        const CategoryProduct categoryProduct = CategoryProduct.Goods;
-        var goodsCategoryListProductFilter = new GetListProductDto(0, 0, null, CategoryProduct: categoryProduct, 0);
-        _productRepositoryFake
-            .Setup(f => f.List())
-            .Returns(_listProduct);
-        var expectedListProduct = _listProduct
-            .Where(p => p.CategoryProduct == categoryProduct)
-            .Take(DefaultPageSize);
-        
-
-        var actualListProducts = _productService.GetListProducts(goodsCategoryListProductFilter);
 
         actualListProducts.Should().NotBeNull().And.BeEquivalentTo(expectedListProduct);
         _productRepositoryFake.Verify(f => f.List(), Times.Once);

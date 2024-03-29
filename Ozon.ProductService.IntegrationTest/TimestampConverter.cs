@@ -1,12 +1,13 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Google.Protobuf.WellKnownTypes;
+using Type = System.Type;
 
 namespace Ozon.ProductService.IntegrationTest;
 
 public class TimestampConverter : JsonConverter<Timestamp>
 {
-    public override Timestamp Read(ref Utf8JsonReader reader, System.Type typeToConvert, JsonSerializerOptions options)
+    public override Timestamp Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.String && reader.TryGetDateTime(out var dateTime))
             return Timestamp.FromDateTime(dateTime);

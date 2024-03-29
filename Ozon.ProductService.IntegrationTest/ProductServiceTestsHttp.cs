@@ -15,12 +15,13 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Ozon.ProductService.IntegrationTest;
 
+[Collection(nameof(ProductServiceTestsHttp))]
 public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesWebApplicationFactory<Startup>>
 {
     private readonly CustomDependenciesWebApplicationFactory<Startup> _webApplicationFactory = new();
 
     [Fact]
-    public async Task CreateProduct_CreateCorrectProduct_ShouldReturnProductIdAndHttpStatusOk()
+    public async Task CreateProduct_ProductIsValid_ShouldReturnProductIdAndHttpStatusOk()
     {
         const int expectedProductId = 1;
         AutoFaker.Configure(f => f.WithConventions());
@@ -50,8 +51,16 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         productsPage.Id.Should().Be(expectedProductId);
     }
 
+    public static IEnumerable<object[]> CategoryFilter()
+    {
+        yield return [CategoryProduct.General];
+        yield return [CategoryProduct.HouseholdChemicals];
+        yield return [CategoryProduct.Technique];
+        yield return [CategoryProduct.Goods];
+    }
+
     [Fact]
-    public async Task CreateProduct_CreateProductWithIncorrectCategory_ShouldReturnHttpStatusBadRequest()
+    public async Task CreateProduct_ProductIsNotValidCategory_ShouldReturnHttpStatusBadRequest()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectCategoryCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -75,7 +84,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task CreateProduct_CreateProductWithIncorrectWarehouseId_ShouldReturnHttpStatusBadRequest()
+    public async Task CreateProduct_ProductIsNotValidWarehouseId_ShouldReturnHttpStatusBadRequest()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectWarehouseIdCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -101,7 +110,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task CreateProduct_CreateProductWithIncorrectPrice_ShouldReturnHttpStatusBadRequest()
+    public async Task CreateProduct_ProductIsNotValidPrice_ShouldReturnHttpStatusBadRequest()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectPriceCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -127,7 +136,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task CreateProduct_CreateProductWithIncorrectWeight_ShouldReturnHttpStatusBadRequest()
+    public async Task CreateProduct_ProductIsNotValidWeight_ShouldReturnHttpStatusBadRequest()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectWeightCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -153,15 +162,15 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task CreateProduct_CreateProductWithIncorrectNameMinLength_ShouldReturnHttpStatusBadRequest()
+    public async Task CreateProduct_ProductIsNameMinLength_ShouldReturnHttpStatusBadRequest()
     {
-        const string minLengthLine = "";
+        const string minLengthName = "";
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectNameMinLengthCreateProductRequest = new AutoFaker<CreateProductRequest>()
             .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .RuleFor(f => f.Weight, weight => weight.Random.Double(1, double.MaxValue))
-            .RuleFor(f => f.Name, minLengthLine)
+            .RuleFor(f => f.Name, minLengthName)
             .RuleFor(f => f.CategoryProduct, faker
                 => (Goods.Types.CategoryGoods)faker.Random.Number(1,
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
@@ -180,15 +189,15 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task CreateProduct_CreateProductWithIncorrectNameMaxLength_ShouldReturnHttpStatusBadRequest()
+    public async Task CreateProduct_ProductIsNameMaxLength_ShouldReturnHttpStatusBadRequest()
     {
-        var maxLengthLine = new string(Enumerable.Repeat('a', 129).ToArray());
+        var maxLengthName = new string(Enumerable.Repeat('a', 129).ToArray());
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectNameMaxLengthCreateProductRequest = new AutoFaker<CreateProductRequest>()
             .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .RuleFor(f => f.Weight, weight => weight.Random.Double(1, double.MaxValue))
-            .RuleFor(f => f.Name, maxLengthLine)
+            .RuleFor(f => f.Name, maxLengthName)
             .RuleFor(f => f.CategoryProduct, faker
                 => (Goods.Types.CategoryGoods)faker.Random.Number(1,
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
@@ -207,7 +216,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task UpdatePriceProduct_UpdateProductWithCorrectIdAndPrice_ShouldReturnHttpStatusOk()
+    public async Task UpdatePriceProduct_OptionsUpdateIsValid_ShouldReturnHttpStatusOk()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var correctUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
@@ -228,7 +237,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task UpdatePriceProduct_UpdateProductWithIncorrectId_ShouldReturnHttpStatusBadRequest()
+    public async Task UpdatePriceProduct_OptionsUpdateIsNotValidId_ShouldReturnHttpStatusBadRequest()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectIdUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
@@ -249,7 +258,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task UpdatePriceProduct_UpdateProductWithIncorrectPrice_ShouldReturnHttpStatusBadRequest()
+    public async Task UpdatePriceProduct_OptionsUpdateIsNotValidPrice_ShouldReturnHttpStatusBadRequest()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectPriceUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
@@ -270,15 +279,15 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task GetProductById_SetCorrectProductId_ShouldReturnProductAndHttpStatusOk()
+    public async Task GetProductById_IsValidProductId_ShouldReturnProduct()
     {
         var expectedProduct = _webApplicationFactory.CorrectListProduct.First();
         AutoFaker.Configure(f => f.WithConventions());
-        var firstCorrectProductIdGetProductByIdRequest = _webApplicationFactory.CorrectListProduct.First().Id;
+        var validProductIdGetProductByIdRequest = _webApplicationFactory.CorrectListProduct.First().Id;
 
 
         var client = _webApplicationFactory.CreateClient();
-        var response = await client.GetAsync($"/api/v1/product/{firstCorrectProductIdGetProductByIdRequest}");
+        var response = await client.GetAsync($"/api/v1/product/{validProductIdGetProductByIdRequest}");
 
 
         var responseBody = await response.Content.ReadAsStringAsync();
@@ -286,13 +295,14 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
 
         var productsPage = GetProductByIdResponse.Parser.ParseJson(responseBody);
         productsPage.Product.Should().BeEquivalentTo(expectedProduct,
-            option => option.Excluding(o => o.CreateDate).Excluding(o => o.CategoryProduct));
+            option => option
+                .Excluding(o => o.CreateDate)
+                .Excluding(o => o.CategoryProduct));
     }
 
     [Fact]
-    public async Task GetProductById_SetIncorrectProductId_ShouldReturnInternalServerError()
+    public async Task GetProductById_IsNotValidProductId_ShouldReturnInternalServerError()
     {
-        AutoFaker.Configure(f => f.WithConventions());
         const int incorrectProductIdGetProductByIdRequest = -1;
 
 
@@ -326,7 +336,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task GetListProduct_SetCorrectPaginationPage_ShouldReturnSelectedNumberPageAndHttpStatusOk()
+    public async Task GetListProduct_SetIsValidPage_ShouldReturnSelectedNumberPageAndHttpStatusOk()
     {
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
@@ -357,7 +367,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     }
 
     [Fact]
-    public async Task GetListProduct_SetCorrectPaginationPageSize_ShouldReturnFirstPageSelectedSizeAndHttpStatusOk()
+    public async Task GetListProduct_SetIsValidPageSize_ShouldReturnFirstPageSelectedSizeAndHttpStatusOk()
     {
         AutoFaker.Configure(f => f.WithConventions());
         var pageSizeGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -385,8 +395,10 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         productsPage.Product.Should().HaveCount(expectedAmountProducts);
     }
 
-    [Fact]
-    public async Task GetListProduct_SetFilterCategoryGeneral_ShouldReturnProductsCategoryAtGeneralAndHttpStatusOk()
+    [Theory]
+    [MemberData(nameof(CategoryFilter))]
+    public async Task GetListProduct_SetFilterCategory_ShouldReturnProductsCategoryAndHttpStatusOk(
+        CategoryProduct category)
     {
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
@@ -395,124 +407,18 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .RuleFor(f => f.PageSize, 0)
             .RuleFor(f => f.Filter, new GoodsListRequest.Types.Filter
                 {
-                    Category = Goods.Types.CategoryGoods.General
+                    Category = (Goods.Types.CategoryGoods)category
                 }
             )
             .Generate();
         var expectedAmountProducts = _webApplicationFactory.CorrectListProduct
-            .Where(p => p.CategoryProduct == CategoryProduct.General)
+            .Where(p => p.CategoryProduct == category)
             .Take(defaultPageSize)
             .Count();
 
 
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(generalGoodsListRequest, optionsJson);
-
-        var client = _webApplicationFactory.CreateClient();
-        var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/api/v1/store/product", content);
-
-
-        var responseBody = await response.Content.ReadAsStringAsync();
-        response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
-
-        var productsPage = GoodsListResponse.Parser.ParseJson(responseBody);
-        productsPage.Product.Should().HaveCount(expectedAmountProducts);
-    }
-
-    [Fact]
-    public async Task GetListProduct_SetFilterCategoryGoods_ShouldReturnProductsCategoryAtGoodsAndHttpStatusOk()
-    {
-        const int defaultPageSize = 10;
-        AutoFaker.Configure(f => f.WithConventions());
-        var goodsGoodsListRequest = new AutoFaker<GoodsListRequest>()
-            .RuleFor(f => f.Page, 0)
-            .RuleFor(f => f.PageSize, 0)
-            .RuleFor(f => f.Filter, new GoodsListRequest.Types.Filter
-                {
-                    Category = Goods.Types.CategoryGoods.Goods
-                }
-            )
-            .Generate();
-        var expectedAmountProducts = _webApplicationFactory.CorrectListProduct
-            .Where(p => p.CategoryProduct == CategoryProduct.Goods)
-            .Take(defaultPageSize)
-            .Count();
-
-
-        var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        var productJsonFormat = JsonSerializer.Serialize(goodsGoodsListRequest, optionsJson);
-
-        var client = _webApplicationFactory.CreateClient();
-        var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/api/v1/store/product", content);
-
-
-        var responseBody = await response.Content.ReadAsStringAsync();
-        response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
-
-        var productsPage = GoodsListResponse.Parser.ParseJson(responseBody);
-        productsPage.Product.Should().HaveCount(expectedAmountProducts);
-    }
-
-    [Fact]
-    public async Task GetListProduct_SetFilterCategoryTechnique_ShouldReturnProductsCategoryAtTechniqueAndHttpStatusOk()
-    {
-        const int defaultPageSize = 10;
-        AutoFaker.Configure(f => f.WithConventions());
-        var techniqueGoodsListRequest = new AutoFaker<GoodsListRequest>()
-            .RuleFor(f => f.Page, 0)
-            .RuleFor(f => f.PageSize, 0)
-            .RuleFor(f => f.Filter, new GoodsListRequest.Types.Filter
-                {
-                    Category = Goods.Types.CategoryGoods.Technique
-                }
-            )
-            .Generate();
-        var expectedAmountProducts = _webApplicationFactory.CorrectListProduct
-            .Where(p => p.CategoryProduct == CategoryProduct.Technique)
-            .Take(defaultPageSize)
-            .Count();
-
-
-        var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        var productJsonFormat = JsonSerializer.Serialize(techniqueGoodsListRequest, optionsJson);
-
-        var client = _webApplicationFactory.CreateClient();
-        var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/api/v1/store/product", content);
-
-
-        var responseBody = await response.Content.ReadAsStringAsync();
-        response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
-
-        var productsPage = GoodsListResponse.Parser.ParseJson(responseBody);
-        productsPage.Product.Should().HaveCount(expectedAmountProducts);
-    }
-
-    [Fact]
-    public async Task
-        GetListProduct_SetFilterCategoryHouseholdChemicals_ShouldReturnProductsCategoryAtHouseholdChemicalsAndHttpStatusOk()
-    {
-        const int defaultPageSize = 10;
-        AutoFaker.Configure(f => f.WithConventions());
-        var householdChemicalsGoodsListRequest = new AutoFaker<GoodsListRequest>()
-            .RuleFor(f => f.Page, 0)
-            .RuleFor(f => f.PageSize, 0)
-            .RuleFor(f => f.Filter, new GoodsListRequest.Types.Filter
-                {
-                    Category = Goods.Types.CategoryGoods.HouseholdChemicals
-                }
-            )
-            .Generate();
-        var expectedAmountProducts = _webApplicationFactory.CorrectListProduct
-            .Where(p => p.CategoryProduct == CategoryProduct.HouseholdChemicals)
-            .Take(defaultPageSize)
-            .Count();
-
-
-        var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        var productJsonFormat = JsonSerializer.Serialize(householdChemicalsGoodsListRequest, optionsJson);
 
         var client = _webApplicationFactory.CreateClient();
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");

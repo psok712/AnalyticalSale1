@@ -8,34 +8,49 @@ namespace Ozon.ProductService.Api
 {
     public class Startup
     {
+        
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            CreateHostBuilder(args).Build().Run();
+        }
 
-            builder.Services.AddGrpc(o =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+        
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddGrpc(o =>
             {
                 o.Interceptors.Add<ValidationInterceptor>();
                 o.Interceptors.Add<LoggingInterceptor>();
                 o.Interceptors.Add<ExceptionInterceptor>();
-            }).AddJsonTranscoding();
-            
-            builder.Services.AddGrpcSwagger();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddValidatorsFromAssemblyContaining(typeof(Startup));
-            builder.Services.AddRepositories();
-            builder.Services.AddServices();
+            });
 
-            var app = builder.Build();
+            services.AddGrpcSwagger();
+            services.AddSwaggerGen();
+            services.AddValidatorsFromAssemblyContaining(typeof(Startup));
+            services.AddRepositories();
+            services.AddServices();
+        }
 
-            if (app.Environment.IsDevelopment())
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.MapGrpcService<ProductGrpcService>();
+            app.UseRouting();
 
-            app.Run();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<ProductGrpcService>();
+            });
         }
     }
 }
