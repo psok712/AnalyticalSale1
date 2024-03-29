@@ -15,20 +15,11 @@ public class CustomDependenciesWebApplicationFactory<TEntryPoint>
     : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
     private readonly Mock<IProductRepository> _productRepositoryFake = new(MockBehavior.Strict);
-    public readonly List<Product> CorrectListProduct;
+    public readonly List<Product> CorrectListProduct = GenerateValidListProducts(20);
 
     public CustomDependenciesWebApplicationFactory()
     {
         AutoFaker.Configure(f => f.WithConventions());
-        CorrectListProduct = new AutoFaker<Product>()
-            .RuleFor(f => f.Id, id => id.Random.Number(1, int.MaxValue))
-            .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
-            .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
-            .RuleFor(f => f.Weight, weight => weight.Random.Double(1, double.MaxValue))
-            .RuleFor(f => f.Name, name => name.Name.JobArea())
-            .RuleFor(f => f.CategoryProduct, faker
-                => (CategoryProduct)faker.Random.Number(1, Enum.GetValues(typeof(CategoryProduct)).Length - 1))
-            .Generate(20);
         const int expectedCreateProductId = 1;
         const int incorrectProductId = -1;
         var firstProductId = CorrectListProduct.First().Id;
@@ -58,5 +49,18 @@ public class CustomDependenciesWebApplicationFactory<TEntryPoint>
         {
             services.Replace(new ServiceDescriptor(typeof(IProductRepository), _productRepositoryFake.Object));
         });
+    }
+    
+    private static List<Product> GenerateValidListProducts(int count)
+    {
+        return new AutoFaker<Product>()
+            .RuleFor(f => f.Id, id => id.Random.Number(1, int.MaxValue))
+            .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
+            .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
+            .RuleFor(f => f.Weight, weight => weight.Random.Double(1, double.MaxValue))
+            .RuleFor(f => f.Name, name => name.Name.JobArea())
+            .RuleFor(f => f.CategoryProduct, faker
+                => (CategoryProduct)faker.Random.Number(1, Enum.GetValues(typeof(CategoryProduct)).Length - 1))
+            .Generate(count);
     }
 }
