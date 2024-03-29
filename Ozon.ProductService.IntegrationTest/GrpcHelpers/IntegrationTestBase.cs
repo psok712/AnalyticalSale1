@@ -25,8 +25,8 @@ namespace Ozon.ProductService.IntegrationTest.GrpcHelpers;
 
 public class IntegrationTestBase : IClassFixture<GrpcTestFixture<Startup>>, IDisposable
 {
-    private GrpcChannel? _channel;
     private readonly IDisposable? _testContext;
+    private GrpcChannel? _channel;
 
     public IntegrationTestBase(GrpcTestFixture<Startup> fixture, ITestOutputHelper outputHelper)
     {

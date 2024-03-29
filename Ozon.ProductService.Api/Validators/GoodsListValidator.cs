@@ -1,6 +1,4 @@
-﻿using System.Data;
-using FluentValidation;
-using Google.Api;
+﻿using FluentValidation;
 
 namespace Ozon.ProductService.Api.Validators;
 

@@ -34,11 +34,11 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     public IEnumerable<Product> GetListProducts(GetListProductDto getListProductDto)
     {
         var pageSize = getListProductDto.PageSize == 0 ? 10 : getListProductDto.PageSize;
-        var amountProductSkip = getListProductDto.Page <= 0 
-            ? 0 
-            : (getListProductDto.Page - 1) * pageSize >= 0 
-                    ? (getListProductDto.Page - 1) * pageSize
-                    : int.MaxValue;
+        var amountProductSkip = getListProductDto.Page <= 0
+            ? 0
+            : (getListProductDto.Page - 1) * pageSize >= 0
+                ? (getListProductDto.Page - 1) * pageSize
+                : int.MaxValue;
 
         return productRepository
             .List()
