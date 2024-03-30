@@ -15,7 +15,6 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Ozon.ProductService.IntegrationTest;
 
-[Collection(nameof(ProductServiceTestsHttp))]
 public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesWebApplicationFactory<Startup>>
 {
     private readonly CustomDependenciesWebApplicationFactory<Startup> _webApplicationFactory = new();
@@ -23,6 +22,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task CreateProduct_ProductIsValid_ShouldReturnProductIdAndHttpStatusOk()
     {
+        // Arrange
         const int expectedProductId = 1;
         AutoFaker.Configure(f => f.WithConventions());
         var correctCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -34,16 +34,16 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
                 => (Goods.Types.CategoryGoods)faker.Random.Number(1,
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
-
-
+        
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(correctCreateProductRequest, optionsJson);
 
         var client = _webApplicationFactory.CreateClient();
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
-
-
+        
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
