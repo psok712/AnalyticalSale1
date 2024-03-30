@@ -62,6 +62,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task CreateProduct_ProductIsNotValidCategory_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectCategoryCreateProductRequest = new AutoFaker<CreateProductRequest>()
             .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
@@ -71,7 +72,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .RuleFor(f => f.CategoryProduct, Goods.Types.CategoryGoods.None)
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectCategoryCreateProductRequest, optionsJson);
 
@@ -79,13 +80,14 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task CreateProduct_ProductIsNotValidWarehouseId_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectWarehouseIdCreateProductRequest = new AutoFaker<CreateProductRequest>()
             .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(int.MinValue, 0))
@@ -97,7 +99,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectWarehouseIdCreateProductRequest, optionsJson);
 
@@ -105,13 +107,14 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task CreateProduct_ProductIsNotValidPrice_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectPriceCreateProductRequest = new AutoFaker<CreateProductRequest>()
             .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
@@ -123,7 +126,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectPriceCreateProductRequest, optionsJson);
 
@@ -131,13 +134,14 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task CreateProduct_ProductIsNotValidWeight_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectWeightCreateProductRequest = new AutoFaker<CreateProductRequest>()
             .RuleFor(f => f.WarehouseId, warehouseId => warehouseId.Random.Number(1, int.MaxValue))
@@ -149,7 +153,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectWeightCreateProductRequest, optionsJson);
 
@@ -157,13 +161,14 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task CreateProduct_ProductIsNameMinLength_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         const string minLengthName = "";
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectNameMinLengthCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -176,7 +181,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectNameMinLengthCreateProductRequest, optionsJson);
 
@@ -184,13 +189,14 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task CreateProduct_ProductIsNameMaxLength_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         var maxLengthName = new string(Enumerable.Repeat('a', 129).ToArray());
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectNameMaxLengthCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -203,7 +209,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectNameMaxLengthCreateProductRequest, optionsJson);
 
@@ -211,20 +217,21 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/product/create", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task UpdatePriceProduct_OptionsUpdateIsValid_ShouldReturnHttpStatusOk()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var correctUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
             .RuleFor(f => f.Id, id => id.Random.Number(1, int.MaxValue))
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(correctUpdatePriceRequest, optionsJson);
 
@@ -232,20 +239,21 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PutAsync("/api/v1/update", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
     }
 
     [Fact]
     public async Task UpdatePriceProduct_OptionsUpdateIsNotValidId_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectIdUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
             .RuleFor(f => f.Id, id => id.Random.Number(int.MinValue, 0))
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectIdUpdatePriceRequest, optionsJson);
 
@@ -253,20 +261,21 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PutAsync("/api/v1/update", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task UpdatePriceProduct_OptionsUpdateIsNotValidPrice_ShouldReturnHttpStatusBadRequest()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectPriceUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
             .RuleFor(f => f.Id, id => id.Random.Number(1, int.MaxValue))
             .RuleFor(f => f.Price, price => price.Random.Double(double.MinValue, 0))
             .Generate();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(incorrectPriceUpdatePriceRequest, optionsJson);
 
@@ -274,22 +283,23 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PutAsync("/api/v1/update", content);
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task GetProductById_IsValidProductId_ShouldReturnProduct()
     {
+        // Arrange
         var expectedProduct = _webApplicationFactory.CorrectListProduct.First();
         AutoFaker.Configure(f => f.WithConventions());
         var validProductIdGetProductByIdRequest = _webApplicationFactory.CorrectListProduct.First().Id;
 
-
+        // Act
         var client = _webApplicationFactory.CreateClient();
         var response = await client.GetAsync($"/api/v1/product/{validProductIdGetProductByIdRequest}");
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -303,31 +313,33 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetProductById_IsNotValidProductId_ShouldReturnInternalServerError()
     {
+        // Arrange
         const int incorrectProductIdGetProductByIdRequest = -1;
 
-
+        // Act
         var client = _webApplicationFactory.CreateClient();
         var response = await client.GetAsync($"/api/v1/product/{incorrectProductIdGetProductByIdRequest}");
 
-
+        // Assert
         response.Should().Match(r => r.StatusCode == HttpStatusCode.InternalServerError);
     }
 
     [Fact]
     public async Task GetListProduct_SetDefaultPaginationAndFilter_ShouldReturnFirstPageAndHttpStatusOk()
     {
+        // Arrange
         const int expectedAmountProducts = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var defaultGoodsListRequest = new Faker<GoodsListRequest>().Generate();
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(defaultGoodsListRequest, optionsJson);
 
-
+        // Act
         var client = _webApplicationFactory.CreateClient();
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -338,6 +350,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetListProduct_SetIsValidPage_ShouldReturnSelectedNumberPageAndHttpStatusOk()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var pageGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -350,7 +363,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(pageGoodsListRequest, optionsJson);
 
@@ -358,7 +371,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -369,6 +382,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetListProduct_SetIsValidPageSize_ShouldReturnFirstPageSelectedSizeAndHttpStatusOk()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var pageSizeGoodsListRequest = new AutoFaker<GoodsListRequest>()
             .RuleFor(f => f.Page, 0)
@@ -379,7 +393,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(pageSizeGoodsListRequest.PageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(pageSizeGoodsListRequest, optionsJson);
 
@@ -387,7 +401,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -400,6 +414,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     public async Task GetListProduct_SetFilterCategory_ShouldReturnProductsCategoryAndHttpStatusOk(
         CategoryProduct category)
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var generalGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -416,7 +431,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(generalGoodsListRequest, optionsJson);
 
@@ -424,7 +439,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -435,6 +450,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetListProduct_SetFilterCategoryNone_ShouldReturnProductsAnyCategoryAndHttpStatusOk()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var anyCategoryGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -450,7 +466,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(anyCategoryGoodsListRequest, optionsJson);
 
@@ -458,7 +474,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -469,6 +485,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetListProduct_SetFilterDateToday_ShouldReturnProductsDateCreatedTodayAndHttpStatusOk()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var createdTodayGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -484,7 +501,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -496,7 +513,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -507,6 +524,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetListProduct_SetFilterWarehouseId_ShouldReturnProductsSelectedWarehouseIdAndHttpStatusOk()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var selectedWarehouseGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -522,7 +540,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(selectedWarehouseGoodsListRequest, optionsJson);
 
@@ -530,7 +548,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 
@@ -541,6 +559,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
     [Fact]
     public async Task GetListProduct_SetFilterAnyWarehouseId_ShouldReturnProductsAnyWarehouseIdAndHttpStatusOk()
     {
+        // Arrange
         const int defaultPageSize = 10;
         const int anyWarehouseId = 0;
         AutoFaker.Configure(f => f.WithConventions());
@@ -556,7 +575,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var optionsJson = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var productJsonFormat = JsonSerializer.Serialize(anyWarehouseGoodsListRequest, optionsJson);
 
@@ -564,7 +583,7 @@ public class ProductServiceTestsHttp : WebApplicationFactory<CustomDependenciesW
         var content = new StringContent(productJsonFormat, Encoding.UTF8, "application/json");
         var response = await client.PostAsync("/api/v1/store/product", content);
 
-
+        // Assert
         var responseBody = await response.Content.ReadAsStringAsync();
         response.Should().Match(r => r.StatusCode == HttpStatusCode.OK);
 

@@ -70,6 +70,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task CreateProduct_ProductIsValid_ShouldReturnCreatedProductId()
     {
+        // Arrange
         const int expectedProductId = 1;
         AutoFaker.Configure(f => f.WithConventions());
         var correctCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -82,17 +83,18 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.CreateProductAsync(correctCreateProductRequest);
 
-
+        // Assert
         response.Id.Should().Be(expectedProductId);
     }
 
     [Fact]
     public async Task CreateProduct_ProductIsNotValidCategory_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectCategoryCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -103,7 +105,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.CategoryProduct, Goods.Types.CategoryGoods.None)
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -118,6 +120,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task CreateProduct_ProductIsNotValidWarehouseId_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectWarehouseIdCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -130,7 +133,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -145,6 +148,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task CreateProduct_ProductIsNotValidPrice_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectPriceCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -157,7 +161,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -172,6 +176,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task CreateProduct_ProductIsNotValidWeight_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectWeightCreateProductRequest = new AutoFaker<CreateProductRequest>()
@@ -184,7 +189,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -199,6 +204,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task CreateProduct_ProductIsNameMinLength_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const string minLengthName = "";
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
@@ -212,7 +218,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -227,6 +233,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task CreateProduct_ProductIsNameMaxLength_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         var maxLengthName = new string(Enumerable.Repeat('a', 129).ToArray());
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
@@ -240,7 +247,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -255,13 +262,14 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task UpdatePriceProduct_OptionsUpdateIsValid_ShouldReturnOk()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var correctUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
             .RuleFor(f => f.Id, id => id.Random.Number(1, int.MaxValue))
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .Generate();
 
-
+        // Act & Assert
         var client = new ProductStorage.ProductStorageClient(Channel);
         await client.UpdatePriceProductAsync(correctUpdatePriceRequest);
     }
@@ -269,6 +277,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task UpdatePriceProduct_OptionsUpdateIsNotValidId_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectIdUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
@@ -276,7 +285,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -291,6 +300,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task UpdatePriceProduct_OptionsUpdateIsNotValidPrice_ShouldReturnErrorInvalidArgument()
     {
+        // Arrange
         const StatusCode expectedStatusCode = StatusCode.InvalidArgument;
         AutoFaker.Configure(f => f.WithConventions());
         var incorrectPriceUpdatePriceRequest = new AutoFaker<UpdatePriceRequest>()
@@ -298,7 +308,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.Price, price => price.Random.Double(double.MinValue, 0))
             .Generate();
 
-
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -313,6 +323,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task GetProductById_IsValidProductId_ShouldReturnProduct()
     {
+        // Arrange
         var expectedProduct = _correctListProduct.First();
         AutoFaker.Configure(f => f.WithConventions());
         var validProductIdGetProductByIdRequest = new GetProductByIdRequest
@@ -320,11 +331,11 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             Id = expectedProduct.Id
         };
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetProductByIdAsync(validProductIdGetProductByIdRequest);
 
-
+        // Assert
         response.Product.Should()
             .BeEquivalentTo(expectedProduct, option => option
                 .Excluding(o => o.CreateDate)
@@ -334,6 +345,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task GetProductById_IsNotValidProductId_ShouldReturnErrorInternal()
     {
+        // Arrange
         const int isNotValidId = -1;
         const StatusCode expectedStatusCode = StatusCode.Internal;
         AutoFaker.Configure(f => f.WithConventions());
@@ -342,6 +354,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             Id = isNotValidId
         };
 
+        // Act & Assert
         try
         {
             var client = new ProductStorage.ProductStorageClient(Channel);
@@ -356,21 +369,23 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [Fact]
     public async Task GetListProduct_SetDefaultPaginationAndFilter_ShouldReturnFirstPageProduct()
     {
+        // Arrange
         const int expectedAmountProducts = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var defaultGoodsListRequest = new Faker<GoodsListRequest>().Generate();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(defaultGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
     [Fact]
     public async Task GetListProduct_SetIsValidPage_ShouldReturnSelectedNumberPageProduct()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var pageGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -383,17 +398,18 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(pageGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
     [Fact]
     public async Task GetListProduct_SetIsValidPageSize_ShouldReturnFirstPageSelectedSize()
     {
+        // Arrange
         AutoFaker.Configure(f => f.WithConventions());
         var pageSizeGoodsListRequest = new AutoFaker<GoodsListRequest>()
             .RuleFor(f => f.Page, 0)
@@ -404,11 +420,11 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(pageSizeGoodsListRequest.PageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(pageSizeGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
@@ -416,6 +432,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
     [MemberData(nameof(CategoryFilter))]
     public async Task GetListProduct_SetFilterCategory_ShouldReturnProductsCategory(CategoryProduct category)
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var generalGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -432,17 +449,18 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(generalGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
     [Fact]
     public async Task GetListProduct_SetFilterCategoryNone_ShouldReturnProductsAnyCategory()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var anyGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -458,17 +476,18 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(anyGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
     [Fact]
     public async Task GetListProduct_SetFilterDateToday_ShouldReturnProductsDateCreatedToday()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var createdTodayGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -484,17 +503,18 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(createdTodayGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
     [Fact]
     public async Task GetListProduct_SetFilterAnyWarehouseId_ShouldReturnProductsAnyWarehouseId()
     {
+        // Arrange
         const int defaultPageSize = 10;
         const int anyWarehouseId = 0;
         AutoFaker.Configure(f => f.WithConventions());
@@ -510,17 +530,18 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(anyWarehouseGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
     [Fact]
     public async Task GetListProduct_SetFilterWarehouseId_ShouldReturnProductsAnyWarehouseId()
     {
+        // Arrange
         const int defaultPageSize = 10;
         AutoFaker.Configure(f => f.WithConventions());
         var selectedWarehouseGoodsListRequest = new AutoFaker<GoodsListRequest>()
@@ -536,11 +557,11 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .Take(defaultPageSize)
             .Count();
 
-
+        // Act
         var client = new ProductStorage.ProductStorageClient(Channel);
         var response = await client.GetListProductAsync(selectedWarehouseGoodsListRequest);
 
-
+        // Assert
         response.Product.Should().HaveCount(expectedAmountProducts);
     }
 
