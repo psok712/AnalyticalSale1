@@ -105,14 +105,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.CategoryProduct, Goods.Types.CategoryGoods.None)
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.CreateProductAsync(incorrectCategoryCreateProductRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -133,14 +138,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.CreateProductAsync(incorrectWarehouseIdCreateProductRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -161,14 +171,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.CreateProductAsync(incorrectPriceCreateProductRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -189,14 +204,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.CreateProductAsync(incorrectWeightCreateProductRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -218,14 +238,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.CreateProductAsync(incorrectNameMinLengthCreateProductRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -247,14 +272,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
                     Enum.GetValues(typeof(CategoryProduct)).Length - 1))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.CreateProductAsync(incorrectNameMaxLengthCreateProductRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -269,7 +299,7 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .Generate();
 
-        // Act & Assert
+        // Act
         await client.UpdatePriceProductAsync(correctUpdatePriceRequest);
     }
 
@@ -285,14 +315,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.Price, price => price.Random.Double(1, double.MaxValue))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.UpdatePriceProductAsync(incorrectIdUpdatePriceRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -308,14 +343,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             .RuleFor(f => f.Price, price => price.Random.Double(double.MinValue, 0))
             .Generate();
 
-        // Act & Assert
+        // Act
         try
         {
             await client.UpdatePriceProductAsync(incorrectPriceUpdatePriceRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
@@ -351,14 +391,19 @@ public class ProductServiceTestsGrpc : IntegrationTestBase
             Id = isNotValidId
         };
 
-        // Act & Assert
+        // Act
         try
         {
             await client.GetProductByIdAsync(incorrectProductIdGetProductByIdRequest);
         }
-        catch (RpcException e)
+        catch (RpcException e) when (e.StatusCode == expectedStatusCode)
         {
+            // Assert
             e.StatusCode.Should().Be(expectedStatusCode);
+        }
+        catch (RpcException)
+        {
+            Assert.Fail("RpcException with expected StatusCode was not thrown.");
         }
     }
 
