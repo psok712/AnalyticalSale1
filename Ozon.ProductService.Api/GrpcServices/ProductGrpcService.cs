@@ -16,7 +16,7 @@ public class ProductGrpcService(IProductService productService) : ProductStorage
             request.Name,
             request.Price,
             request.Weight,
-            (CategoryProduct)request.Category,
+            (CategoryProduct)request.CategoryProduct,
             request.WarehouseId);
         var productId = productService.CreateProduct(dto);
 

@@ -33,9 +33,12 @@ public class ProductService(IProductRepository productRepository) : IProductServ
 
     public IEnumerable<Product> GetListProducts(GetListProductDto getListProductDto)
     {
-        var amountProductSkip =
-            getListProductDto.Page == 0 ? 0 : (getListProductDto.Page - 1) * getListProductDto.PageSize;
         var pageSize = getListProductDto.PageSize == 0 ? 10 : getListProductDto.PageSize;
+        var amountProductSkip = getListProductDto.Page <= 0
+            ? 0
+            : (getListProductDto.Page - 1) * pageSize >= 0
+                ? (getListProductDto.Page - 1) * pageSize
+                : int.MaxValue;
 
         return productRepository
             .List()
@@ -49,7 +52,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
 
         bool WarehouseFilter(Product p)
         {
-            return getListProductDto.WarehouseId <= 0 || getListProductDto.WarehouseId == p.WarehouseId;
+            return getListProductDto.WarehouseId == 0 || getListProductDto.WarehouseId == p.WarehouseId;
         }
 
         bool CategoryFilter(Product p)

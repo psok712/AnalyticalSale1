@@ -17,7 +17,7 @@ service ProductStorage {
   }
   rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse) {
     option (google.api.http) = {
-      get: "/api/v1/product"
+      get: "/api/v1/product/{id}"
     };
   }
   rpc UpdatePriceProduct(UpdatePriceRequest) returns (google.protobuf.Empty) {
@@ -45,7 +45,7 @@ message Goods {
     GENERAL = 1;
     HOUSEHOLD_CHEMICALS = 2;
     TECHNIQUE = 3;
-    PRODUCTS = 4;
+    GOODS = 4;
   }
 
   CategoryGoods category = 5;
@@ -79,7 +79,7 @@ message CreateProductRequest {
   string name = 1;
   double price = 2;
   double weight = 3;
-  Goods.CategoryGoods category = 4;
+  Goods.CategoryGoods category_product = 4;
   int64 warehouse_id = 5;
 }
 

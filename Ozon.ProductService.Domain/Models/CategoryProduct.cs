@@ -6,5 +6,5 @@ public enum CategoryProduct
     General,
     HouseholdChemicals,
     Technique,
-    Products
+    Goods
 }
